@@ -1,6 +1,3 @@
-/**
- * Implementación del Repositorio de Puerto con MySQL
- */
 import mysqlConnection from '../database/MySQLConnection.js';
 import { Puerto } from '../../domain/entities/Puerto.js';
 
@@ -11,13 +8,12 @@ export class MySQLPuertoRepository {
 
   async create(puerto) {
     const [result] = await this.pool.execute(
-      `INSERT INTO puertos (nombre, ubicacion, pais, fecha_creacion)
-       VALUES (?, ?, ?, ?)`,
+      `INSERT INTO puertos (nombre, ubicacion, pais)
+       VALUES (?, ?, ?)`,
       [
         puerto.nombre,
         puerto.ubicacion,
-        puerto.pais || null,
-        puerto.fechaCreacion
+        puerto.pais || null
       ]
     );
 
@@ -36,7 +32,7 @@ export class MySQLPuertoRepository {
   }
 
   async findAll() {
-    const [rows] = await this.pool.execute('SELECT * FROM puertos ORDER BY fecha_creacion DESC');
+    const [rows] = await this.pool.execute('SELECT * FROM puertos ORDER BY id DESC');
     return rows.map(row => this.mapToEntity(row));
   }
 
@@ -66,8 +62,7 @@ export class MySQLPuertoRepository {
       id: row.id,
       nombre: row.nombre,
       ubicacion: row.ubicacion,
-      pais: row.pais,
-      fechaCreacion: row.fecha_creacion
+      pais: row.pais
     });
   }
 }

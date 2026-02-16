@@ -46,28 +46,17 @@ describe('Bodega', () => {
   });
 
   describe('constructor', () => {
-    test('debe asignar fechaCreacion por defecto si no se proporciona', () => {
-      const nuevaBodega = new Bodega({
-        nombre: 'Test',
-        direccion: 'Dirección Test'
-      });
-      expect(nuevaBodega.fechaCreacion).toBeInstanceOf(Date);
-    });
-
     test('debe asignar todos los campos correctamente', () => {
-      const fecha = new Date('2024-01-01');
       const nuevaBodega = new Bodega({
         id: 1,
         nombre: 'Bodega Test',
         direccion: 'Dirección Test',
-        ciudad: 'Ciudad Test',
-        fechaCreacion: fecha
+        ciudad: 'Ciudad Test'
       });
       expect(nuevaBodega.id).toBe(1);
       expect(nuevaBodega.nombre).toBe('Bodega Test');
       expect(nuevaBodega.direccion).toBe('Dirección Test');
       expect(nuevaBodega.ciudad).toBe('Ciudad Test');
-      expect(nuevaBodega.fechaCreacion).toBe(fecha);
     });
   });
 });

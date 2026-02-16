@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS clientes (
     email VARCHAR(255) NOT NULL UNIQUE,
     telefono VARCHAR(50),
     direccion TEXT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -16,8 +15,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 CREATE TABLE IF NOT EXISTS productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    descripcion TEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla de Bodegas
@@ -25,8 +23,7 @@ CREATE TABLE IF NOT EXISTS bodegas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     direccion TEXT NOT NULL,
-    ciudad VARCHAR(255),
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ciudad VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla de Puertos
@@ -34,8 +31,7 @@ CREATE TABLE IF NOT EXISTS puertos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     ubicacion VARCHAR(255) NOT NULL,
-    pais VARCHAR(255),
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    pais VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla de Envíos Terrestres
@@ -52,7 +48,6 @@ CREATE TABLE IF NOT EXISTS envios_terrestres (
     numero_guia VARCHAR(10) NOT NULL UNIQUE,
     descuento DECIMAL(5, 4) DEFAULT 0,
     precio_final DECIMAL(10, 2) NOT NULL,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE RESTRICT,
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE RESTRICT,
     FOREIGN KEY (bodega_id) REFERENCES bodegas(id) ON DELETE RESTRICT,
@@ -77,7 +72,6 @@ CREATE TABLE IF NOT EXISTS envios_maritimos (
     numero_guia VARCHAR(10) NOT NULL UNIQUE,
     descuento DECIMAL(5, 4) DEFAULT 0,
     precio_final DECIMAL(10, 2) NOT NULL,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE RESTRICT,
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE RESTRICT,
     FOREIGN KEY (puerto_id) REFERENCES puertos(id) ON DELETE RESTRICT,

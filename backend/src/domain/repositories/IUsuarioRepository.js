@@ -1,5 +1,5 @@
-export class IBodegaRepository {
-  async create(bodega) {
+export class IUsuarioRepository {
+  async create(usuario) {
     throw new Error('Method create() must be implemented');
   }
 
@@ -7,11 +7,15 @@ export class IBodegaRepository {
     throw new Error('Method findById() must be implemented');
   }
 
+  async findByEmail(email) {
+    throw new Error('Method findByEmail() must be implemented');
+  }
+
   async findAll() {
     throw new Error('Method findAll() must be implemented');
   }
 
-  async update(id, bodega) {
+  async update(id, usuario) {
     throw new Error('Method update() must be implemented');
   }
 

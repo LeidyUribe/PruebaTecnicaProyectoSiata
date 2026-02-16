@@ -13,8 +13,9 @@ export function createAuthRoutes() {
 
   /**
    * POST /api/auth/login
-   * Genera un token JWT para pruebas
-   * En producción, esto debería validar credenciales reales
+   * DEPRECADO: Usar /api/usuarios/login en su lugar
+   * Mantenido para compatibilidad hacia atrás
+   * Genera un token JWT para pruebas (sin validación real)
    */
   router.post('/login', (req, res) => {
     try {
@@ -26,8 +27,8 @@ export function createAuthRoutes() {
         });
       }
 
-      // Para esta prueba técnica, generamos un token sin validar credenciales
-      // En producción, aquí se validarían usuario y contraseña
+      // DEPRECADO: Este endpoint genera tokens sin validación
+      // Usar /api/usuarios/login para autenticación real
       const token = jwt.sign(
         { 
           userId: 1, 
@@ -40,7 +41,7 @@ export function createAuthRoutes() {
 
       res.json({
         success: true,
-        message: 'Token generado exitosamente',
+        message: 'Token generado exitosamente (DEPRECADO: usar /api/usuarios/login)',
         token,
         expiresIn: process.env.JWT_EXPIRES_IN || '24h'
       });

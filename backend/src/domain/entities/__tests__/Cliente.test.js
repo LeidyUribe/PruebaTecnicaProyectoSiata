@@ -59,22 +59,13 @@ describe('Cliente', () => {
   });
 
   describe('constructor', () => {
-    test('debe asignar fechaCreacion por defecto si no se proporciona', () => {
+    test('debe crear cliente correctamente', () => {
       const nuevoCliente = new Cliente({
         nombre: 'Test',
         email: 'test@example.com'
       });
-      expect(nuevoCliente.fechaCreacion).toBeInstanceOf(Date);
-    });
-
-    test('debe usar fechaCreacion proporcionada', () => {
-      const fecha = new Date('2024-01-01');
-      const nuevoCliente = new Cliente({
-        nombre: 'Test',
-        email: 'test@example.com',
-        fechaCreacion: fecha
-      });
-      expect(nuevoCliente.fechaCreacion).toBe(fecha);
+      expect(nuevoCliente.nombre).toBe('Test');
+      expect(nuevoCliente.email).toBe('test@example.com');
     });
   });
 });

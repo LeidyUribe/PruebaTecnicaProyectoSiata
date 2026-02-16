@@ -34,6 +34,94 @@
   line-height: 1.6;
 }
 
+.login-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.login-tabs button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.3s;
+}
+
+.login-tabs button:hover {
+  color: #667eea;
+}
+
+.login-tabs button.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.login-card .form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.login-card .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.login-card .form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.login-card .form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.login-card .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  background: white;
+  cursor: pointer;
+}
+
+.login-card .form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.login-card .form-group small {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.login-card .form-group .form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  background: white;
+  cursor: pointer;
+}
+
 .login-btn {
   width: 100%;
   padding: 1rem;

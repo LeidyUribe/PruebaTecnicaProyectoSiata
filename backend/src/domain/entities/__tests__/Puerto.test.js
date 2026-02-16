@@ -46,28 +46,17 @@ describe('Puerto', () => {
   });
 
   describe('constructor', () => {
-    test('debe asignar fechaCreacion por defecto si no se proporciona', () => {
-      const nuevoPuerto = new Puerto({
-        nombre: 'Test',
-        ubicacion: 'Ubicación Test'
-      });
-      expect(nuevoPuerto.fechaCreacion).toBeInstanceOf(Date);
-    });
-
     test('debe asignar todos los campos correctamente', () => {
-      const fecha = new Date('2024-01-01');
       const nuevoPuerto = new Puerto({
         id: 1,
         nombre: 'Puerto Test',
         ubicacion: 'Ubicación Test',
-        pais: 'País Test',
-        fechaCreacion: fecha
+        pais: 'País Test'
       });
       expect(nuevoPuerto.id).toBe(1);
       expect(nuevoPuerto.nombre).toBe('Puerto Test');
       expect(nuevoPuerto.ubicacion).toBe('Ubicación Test');
       expect(nuevoPuerto.pais).toBe('País Test');
-      expect(nuevoPuerto.fechaCreacion).toBe(fecha);
     });
   });
 });

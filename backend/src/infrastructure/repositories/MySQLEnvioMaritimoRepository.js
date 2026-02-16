@@ -1,6 +1,3 @@
-/**
- * Implementación del Repositorio de Envío Marítimo con MySQL
- */
 import mysqlConnection from '../database/MySQLConnection.js';
 import { EnvioMaritimo } from '../../domain/entities/EnvioMaritimo.js';
 
@@ -13,8 +10,8 @@ export class MySQLEnvioMaritimoRepository {
     const [result] = await this.pool.execute(
       `INSERT INTO envios_maritimos 
        (cliente_id, producto_id, cantidad, fecha_registro, fecha_entrega, 
-        puerto_id, precio_envio, numero_flota, numero_guia, descuento, precio_final, fecha_creacion)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        puerto_id, precio_envio, numero_flota, numero_guia, descuento, precio_final)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         envio.clienteId,
         envio.productoId,
@@ -26,8 +23,7 @@ export class MySQLEnvioMaritimoRepository {
         envio.numeroFlota.toUpperCase(),
         envio.numeroGuia.toUpperCase(),
         envio.descuento,
-        envio.precioFinal,
-        envio.fechaCreacion
+        envio.precioFinal
       ]
     );
 
@@ -47,14 +43,14 @@ export class MySQLEnvioMaritimoRepository {
 
   async findAll() {
     const [rows] = await this.pool.execute(
-      'SELECT * FROM envios_maritimos ORDER BY fecha_creacion DESC'
+      'SELECT * FROM envios_maritimos ORDER BY id DESC'
     );
     return rows.map(row => this.mapToEntity(row));
   }
 
   async findByClienteId(clienteId) {
     const [rows] = await this.pool.execute(
-      'SELECT * FROM envios_maritimos WHERE cliente_id = ? ORDER BY fecha_creacion DESC',
+      'SELECT * FROM envios_maritimos WHERE cliente_id = ? ORDER BY id DESC',
       [clienteId]
     );
     return rows.map(row => this.mapToEntity(row));
@@ -115,8 +111,7 @@ export class MySQLEnvioMaritimoRepository {
       numeroFlota: row.numero_flota,
       numeroGuia: row.numero_guia,
       descuento: parseFloat(row.descuento),
-      precioFinal: parseFloat(row.precio_final),
-      fechaCreacion: row.fecha_creacion
+      precioFinal: parseFloat(row.precio_final)
     });
   }
 }

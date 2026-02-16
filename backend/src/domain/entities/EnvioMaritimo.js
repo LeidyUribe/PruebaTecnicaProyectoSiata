@@ -1,12 +1,3 @@
-/**
- * Entidad de Dominio: Envío Marítimo
- * Representa un envío por vía marítima
- * 
- * Reglas de negocio:
- * - Número flota: 3 letras + 4 números + 1 letra
- * - Número guía: 10 caracteres alfanuméricos únicos
- * - Descuento 3% si cantidad > 10
- */
 export class EnvioMaritimo {
   constructor({
     id,
@@ -20,8 +11,7 @@ export class EnvioMaritimo {
     numeroFlota,
     numeroGuia,
     descuento,
-    precioFinal,
-    fechaCreacion
+    precioFinal
   }) {
     this.id = id;
     this.clienteId = clienteId;
@@ -35,12 +25,8 @@ export class EnvioMaritimo {
     this.numeroGuia = numeroGuia;
     this.descuento = descuento || 0;
     this.precioFinal = precioFinal;
-    this.fechaCreacion = fechaCreacion || new Date();
   }
 
-  /**
-   * Valida que el envío marítimo cumpla con todas las reglas de negocio
-   */
   isValid() {
     return this.clienteId &&
            this.productoId &&
@@ -54,41 +40,27 @@ export class EnvioMaritimo {
            this.fechaEntrega >= this.fechaRegistro;
   }
 
-  /**
-   * Valida formato de número de flota: 3 letras + 4 números + 1 letra
-   * Ejemplo: ABC1234D
-   */
   isValidNumeroFlota(numeroFlota) {
     if (!numeroFlota) return false;
     const flotaRegex = /^[A-Z]{3}[0-9]{4}[A-Z]{1}$/i;
     return flotaRegex.test(numeroFlota);
   }
 
-  /**
-   * Valida formato de número de guía: 10 caracteres alfanuméricos
-   */
   isValidNumeroGuia(numeroGuia) {
     if (!numeroGuia) return false;
     const guiaRegex = /^[A-Z0-9]{10}$/i;
     return guiaRegex.test(numeroGuia);
   }
 
-  /**
-   * Calcula el descuento según las reglas de negocio
-   * Descuento 3% si cantidad > 10
-   */
   calcularDescuento() {
     if (this.cantidad > 10) {
-      this.descuento = 0.03; // 3%
+      this.descuento = 0.03;
     } else {
       this.descuento = 0;
     }
     return this.descuento;
   }
 
-  /**
-   * Calcula el precio final aplicando el descuento
-   */
   calcularPrecioFinal() {
     const descuento = this.calcularDescuento();
     this.precioFinal = this.precioEnvio * (1 - descuento);
