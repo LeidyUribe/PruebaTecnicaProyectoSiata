@@ -22,8 +22,16 @@ import { CreatePuertoUseCase } from './application/use-cases/puerto/CreatePuerto
 import { GetAllPuertosUseCase } from './application/use-cases/puerto/GetAllPuertosUseCase.js';
 import { CreateEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/CreateEnvioTerrestreUseCase.js';
 import { GetAllEnviosTerrestresUseCase } from './application/use-cases/envio-terrestre/GetAllEnviosTerrestresUseCase.js';
+import { GetEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/GetEnvioTerrestreUseCase.js';
+import { UpdateEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/UpdateEnvioTerrestreUseCase.js';
+import { DeleteEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/DeleteEnvioTerrestreUseCase.js';
+import { SearchEnviosTerrestresUseCase } from './application/use-cases/envio-terrestre/SearchEnviosTerrestresUseCase.js';
 import { CreateEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/CreateEnvioMaritimoUseCase.js';
 import { GetAllEnviosMaritimosUseCase } from './application/use-cases/envio-maritimo/GetAllEnviosMaritimosUseCase.js';
+import { GetEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/GetEnvioMaritimoUseCase.js';
+import { UpdateEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/UpdateEnvioMaritimoUseCase.js';
+import { DeleteEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/DeleteEnvioMaritimoUseCase.js';
+import { SearchEnviosMaritimosUseCase } from './application/use-cases/envio-maritimo/SearchEnviosMaritimosUseCase.js';
 import { RegisterUsuarioUseCase } from './application/use-cases/usuario/RegisterUsuarioUseCase.js';
 import { LoginUsuarioUseCase } from './application/use-cases/usuario/LoginUsuarioUseCase.js';
 
@@ -80,6 +88,15 @@ const createEnvioTerrestreUseCase = new CreateEnvioTerrestreUseCase(
   bodegaRepository
 );
 const getAllEnviosTerrestresUseCase = new GetAllEnviosTerrestresUseCase(envioTerrestreRepository);
+const getEnvioTerrestreUseCase = new GetEnvioTerrestreUseCase(envioTerrestreRepository);
+const updateEnvioTerrestreUseCase = new UpdateEnvioTerrestreUseCase(
+  envioTerrestreRepository,
+  clienteRepository,
+  productoRepository,
+  bodegaRepository
+);
+const deleteEnvioTerrestreUseCase = new DeleteEnvioTerrestreUseCase(envioTerrestreRepository);
+const searchEnviosTerrestresUseCase = new SearchEnviosTerrestresUseCase(envioTerrestreRepository);
 const createEnvioMaritimoUseCase = new CreateEnvioMaritimoUseCase(
   envioMaritimoRepository,
   clienteRepository,
@@ -87,6 +104,15 @@ const createEnvioMaritimoUseCase = new CreateEnvioMaritimoUseCase(
   puertoRepository
 );
 const getAllEnviosMaritimosUseCase = new GetAllEnviosMaritimosUseCase(envioMaritimoRepository);
+const getEnvioMaritimoUseCase = new GetEnvioMaritimoUseCase(envioMaritimoRepository);
+const updateEnvioMaritimoUseCase = new UpdateEnvioMaritimoUseCase(
+  envioMaritimoRepository,
+  clienteRepository,
+  productoRepository,
+  puertoRepository
+);
+const deleteEnvioMaritimoUseCase = new DeleteEnvioMaritimoUseCase(envioMaritimoRepository);
+const searchEnviosMaritimosUseCase = new SearchEnviosMaritimosUseCase(envioMaritimoRepository);
 const registerUsuarioUseCase = new RegisterUsuarioUseCase(usuarioRepository);
 const loginUsuarioUseCase = new LoginUsuarioUseCase(usuarioRepository);
 
@@ -103,8 +129,16 @@ const dependencies = {
   getAllPuertosUseCase,
   createEnvioTerrestreUseCase,
   getAllEnviosTerrestresUseCase,
+  getEnvioTerrestreUseCase,
+  updateEnvioTerrestreUseCase,
+  deleteEnvioTerrestreUseCase,
+  searchEnviosTerrestresUseCase,
   createEnvioMaritimoUseCase,
   getAllEnviosMaritimosUseCase,
+  getEnvioMaritimoUseCase,
+  updateEnvioMaritimoUseCase,
+  deleteEnvioMaritimoUseCase,
+  searchEnviosMaritimosUseCase,
   registerUsuarioUseCase,
   loginUsuarioUseCase
 };

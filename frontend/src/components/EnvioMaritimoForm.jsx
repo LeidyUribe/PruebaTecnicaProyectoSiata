@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const EnvioMaritimoForm = ({ clientes, productos, puertos, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
+const EnvioMaritimoForm = ({ clientes, productos, puertos, onSubmit, onCancel, initialData }) => {
+  const [formData, setFormData] = useState(initialData ? {
+    clienteId: String(initialData.clienteId),
+    productoId: String(initialData.productoId),
+    cantidad: String(initialData.cantidad),
+    fechaRegistro: initialData.fechaRegistro?.split('T')[0] || '',
+    fechaEntrega: initialData.fechaEntrega?.split('T')[0] || '',
+    puertoId: String(initialData.puertoId),
+    precioEnvio: String(initialData.precioEnvio),
+    numeroFlota: initialData.numeroFlota || '',
+    numeroGuia: initialData.numeroGuia || ''
+  } : {
     clienteId: '',
     productoId: '',
     cantidad: '',
@@ -12,6 +22,27 @@ const EnvioMaritimoForm = ({ clientes, productos, puertos, onSubmit, onCancel })
     numeroFlota: '',
     numeroGuia: ''
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        clienteId: String(initialData.clienteId),
+        productoId: String(initialData.productoId),
+        cantidad: String(initialData.cantidad),
+        fechaRegistro: initialData.fechaRegistro?.split('T')[0] || '',
+        fechaEntrega: initialData.fechaEntrega?.split('T')[0] || '',
+        puertoId: String(initialData.puertoId),
+        precioEnvio: String(initialData.precioEnvio),
+        numeroFlota: initialData.numeroFlota || '',
+        numeroGuia: initialData.numeroGuia || ''
+      });
+    } else {
+      setFormData({
+        clienteId: '', productoId: '', cantidad: '', fechaRegistro: '', fechaEntrega: '',
+        puertoId: '', precioEnvio: '', numeroFlota: '', numeroGuia: ''
+      });
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     setFormData({
@@ -153,7 +184,7 @@ const EnvioMaritimoForm = ({ clientes, productos, puertos, onSubmit, onCancel })
       </div>
       <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
         <button type="submit" className="btn btn-primary">
-          Crear Envío Marítimo
+          {initialData ? 'Actualizar Envío' : 'Crear Envío Marítimo'}
         </button>
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
           Cancelar
