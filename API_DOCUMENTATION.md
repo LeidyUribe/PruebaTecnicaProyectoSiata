@@ -38,17 +38,24 @@ API RESTful para la gestión de logística terrestre y marítima. Permite gestio
 
 ## 🔐 Autenticación
 
-La API utiliza **Bearer Token** (JWT) para autenticación. Todas las rutas (excepto `/api/auth/login`) requieren autenticación.
+La API utiliza **Bearer Token** (JWT) para autenticación. Todas las rutas (excepto `/api/usuarios/register` y `/api/usuarios/login`) requieren autenticación.
 
 ### Cómo obtener un token
 
-1. Realizar POST a `/api/auth/login`
-2. Obtener el token de la respuesta
-3. Incluir el token en todas las peticiones:
+**Opción 1: Registro y Login (Recomendado)**
+1. Registrar un nuevo usuario con POST a `/api/usuarios/register`
+2. Iniciar sesión con POST a `/api/usuarios/login` usando email y contraseña
+3. Obtener el token de la respuesta
+4. Incluir el token en todas las peticiones:
 
 ```
 Authorization: Bearer <token>
 ```
+
+**Opción 2: Login Legacy (Deprecado)**
+1. Realizar POST a `/api/auth/login` (sin validación de credenciales)
+2. Obtener el token de la respuesta
+3. Incluir el token en todas las peticiones
 
 ### Ejemplo de Header
 
@@ -117,11 +124,152 @@ https://api.tudominio.com/api
 
 ## 🛣️ Endpoints
 
-### 1. Autenticación
+### 1. Autenticación y Usuarios
 
-#### POST `/api/auth/login`
+#### POST `/api/usuarios/register`
 
-Genera un token JWT para autenticación.
+Registra un nuevo usuario en el sistema.
+
+**No requiere autenticación**
+
+**Request Body:**
+```json
+{
+  "email": "usuario@example.com",
+  "password": "password123",
+  "nombre": "Juan Pérez",
+  "rol": "user"  // Opcional: "user" o "admin", por defecto "user"
+}
+```
+
+**Validaciones:**
+- `email` (string, requerido, formato email válido, único)
+- `password` (string, requerido, mínimo 6 caracteres)
+- `nombre` (string, requerido, 2-255 caracteres)
+- `rol` (string, opcional, "user" o "admin")
+
+**Response 201:**
+```json
+{
+  "success": true,
+  "message": "Usuario registrado exitosamente",
+  "data": {
+    "id": 1,
+    "email": "usuario@example.com",
+    "nombre": "Juan Pérez",
+    "rol": "user",
+  }
+}
+```
+
+**Response 400 (Validación):**
+```json
+{
+  "success": false,
+  "message": "Errores de validación",
+  "errors": [
+    {
+      "field": "password",
+      "message": "La contraseña debe tener al menos 6 caracteres"
+    }
+  ]
+}
+```
+
+**Response 409 (Email duplicado):**
+```json
+{
+  "success": false,
+  "message": "El email ya está registrado"
+}
+```
+
+**Ejemplo con cURL:**
+```bash
+curl -X POST http://localhost:3000/api/usuarios/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@example.com",
+    "password": "password123",
+    "nombre": "Juan Pérez"
+  }'
+```
+
+---
+
+#### POST `/api/usuarios/login`
+
+Inicia sesión con email y contraseña.
+
+**No requiere autenticación**
+
+**Request Body:**
+```json
+{
+  "email": "usuario@example.com",
+  "password": "password123"
+}
+```
+
+**Validaciones:**
+- `email` (string, requerido, formato email válido)
+- `password` (string, requerido)
+
+**Response 200:**
+```json
+{
+  "success": true,
+  "message": "Login exitoso",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "usuario": {
+    "id": 1,
+    "email": "usuario@example.com",
+    "nombre": "Juan Pérez",
+    "rol": "user"
+  },
+  "expiresIn": "24h"
+}
+```
+
+**Response 400 (Validación):**
+```json
+{
+  "success": false,
+  "message": "Errores de validación",
+  "errors": [
+    {
+      "field": "email",
+      "message": "El email es requerido"
+    }
+  ]
+}
+```
+
+**Response 401 (Credenciales inválidas):**
+```json
+{
+  "success": false,
+  "message": "Credenciales inválidas"
+}
+```
+
+**Ejemplo con cURL:**
+```bash
+curl -X POST http://localhost:3000/api/usuarios/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@example.com",
+    "password": "password123"
+  }'
+```
+
+---
+
+#### POST `/api/auth/login` (DEPRECADO)
+
+**⚠️ DEPRECADO** - Mantenido solo para compatibilidad. Usar `/api/usuarios/login` en su lugar.
+
+Genera un token JWT sin validar credenciales.
 
 **No requiere autenticación**
 
@@ -134,16 +282,10 @@ Genera un token JWT para autenticación.
 ```json
 {
   "success": true,
-  "message": "Token generado exitosamente",
+  "message": "Token generado exitosamente (DEPRECADO: usar /api/usuarios/login)",
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "expiresIn": "24h"
 }
-```
-
-**Ejemplo con cURL:**
-```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json"
 ```
 
 ---
@@ -173,7 +315,6 @@ Authorization: Bearer <token>
       "email": "juan@example.com",
       "telefono": "1234567890",
       "direccion": "Calle 123",
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     }
   ]
 }
@@ -206,7 +347,6 @@ Obtiene un cliente por ID.
     "email": "juan@example.com",
     "telefono": "1234567890",
     "direccion": "Calle 123",
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -260,7 +400,6 @@ Crea un nuevo cliente.
     "email": "juan@example.com",
     "telefono": "1234567890",
     "direccion": "Calle 123",
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -320,7 +459,6 @@ Obtiene todos los productos.
       "id": 1,
       "tipo": "Electrónico",
       "descripcion": "Producto electrónico de alta calidad",
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     }
   ]
 }
@@ -355,7 +493,6 @@ Crea un nuevo producto.
     "id": 1,
     "tipo": "Electrónico",
     "descripcion": "Producto electrónico de alta calidad",
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -381,7 +518,6 @@ Obtiene todas las bodegas.
       "nombre": "Bodega Central",
       "direccion": "Calle Principal 123",
       "ciudad": "Bogotá",
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     }
   ]
 }
@@ -419,7 +555,6 @@ Crea una nueva bodega.
     "nombre": "Bodega Central",
     "direccion": "Calle Principal 123",
     "ciudad": "Bogotá",
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -445,7 +580,6 @@ Obtiene todos los puertos.
       "nombre": "Puerto de Cartagena",
       "ubicacion": "Cartagena, Colombia",
       "pais": "Colombia",
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     }
   ]
 }
@@ -483,7 +617,6 @@ Crea un nuevo puerto.
     "nombre": "Puerto de Cartagena",
     "ubicacion": "Cartagena, Colombia",
     "pais": "Colombia",
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -517,7 +650,6 @@ Obtiene todos los envíos terrestres.
       "numeroGuia": "GUIA123456",
       "descuento": 0.05,
       "precioFinal": 950.00,
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     }
   ]
 }
@@ -581,7 +713,6 @@ Crea un nuevo envío terrestre.
     "numeroGuia": "GUIA123456",
     "descuento": 0.05,
     "precioFinal": 950.00,
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -663,7 +794,6 @@ Obtiene todos los envíos marítimos.
       "numeroGuia": "GUIA123456",
       "descuento": 0.03,
       "precioFinal": 1940.00,
-      "fechaCreacion": "2024-01-01T00:00:00.000Z"
     }
   ]
 }
@@ -727,7 +857,6 @@ Crea un nuevo envío marítimo.
     "numeroGuia": "GUIA123456",
     "descuento": 0.03,
     "precioFinal": 1940.00,
-    "fechaCreacion": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -766,6 +895,17 @@ Crea un nuevo envío marítimo.
 
 ## 📋 Modelos de Datos
 
+### Usuario
+```typescript
+{
+  id: number;
+  email: string;
+  nombre: string;
+  rol: 'user' | 'admin';
+  // password nunca se retorna en las respuestas
+}
+```
+
 ### Cliente
 ```typescript
 {
@@ -774,7 +914,6 @@ Crea un nuevo envío marítimo.
   email: string;
   telefono?: string;
   direccion?: string;
-  fechaCreacion: Date;
 }
 ```
 
@@ -784,7 +923,6 @@ Crea un nuevo envío marítimo.
   id: number;
   tipo: string;
   descripcion?: string;
-  fechaCreacion: Date;
 }
 ```
 
@@ -795,7 +933,6 @@ Crea un nuevo envío marítimo.
   nombre: string;
   direccion: string;
   ciudad?: string;
-  fechaCreacion: Date;
 }
 ```
 
@@ -806,7 +943,6 @@ Crea un nuevo envío marítimo.
   nombre: string;
   ubicacion: string;
   pais?: string;
-  fechaCreacion: Date;
 }
 ```
 
@@ -825,7 +961,6 @@ Crea un nuevo envío marítimo.
   numeroGuia: string; // 10 caracteres alfanuméricos
   descuento: number; // 0.05 si cantidad > 10
   precioFinal: number;
-  fechaCreacion: Date;
 }
 ```
 
@@ -844,7 +979,6 @@ Crea un nuevo envío marítimo.
   numeroGuia: string; // 10 caracteres alfanuméricos
   descuento: number; // 0.03 si cantidad > 10
   precioFinal: number;
-  fechaCreacion: Date;
 }
 ```
 

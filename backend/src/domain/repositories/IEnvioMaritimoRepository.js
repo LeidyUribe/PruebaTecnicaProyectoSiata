@@ -1,6 +1,3 @@
-/**
- * Interfaz del Repositorio de Envío Marítimo
- */
 export class IEnvioMaritimoRepository {
   async create(envio) {
     throw new Error('Method create() must be implemented');

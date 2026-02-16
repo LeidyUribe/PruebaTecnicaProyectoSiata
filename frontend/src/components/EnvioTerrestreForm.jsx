@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const EnvioTerrestreForm = ({ clientes, productos, bodegas, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
+const EnvioTerrestreForm = ({ clientes, productos, bodegas, onSubmit, onCancel, initialData }) => {
+  const [formData, setFormData] = useState(initialData ? {
+    clienteId: String(initialData.clienteId),
+    productoId: String(initialData.productoId),
+    cantidad: String(initialData.cantidad),
+    fechaRegistro: initialData.fechaRegistro?.split('T')[0] || '',
+    fechaEntrega: initialData.fechaEntrega?.split('T')[0] || '',
+    bodegaId: String(initialData.bodegaId),
+    precioEnvio: String(initialData.precioEnvio),
+    placaVehiculo: initialData.placaVehiculo || '',
+    numeroGuia: initialData.numeroGuia || ''
+  } : {
     clienteId: '',
     productoId: '',
     cantidad: '',
@@ -12,6 +22,27 @@ const EnvioTerrestreForm = ({ clientes, productos, bodegas, onSubmit, onCancel }
     placaVehiculo: '',
     numeroGuia: ''
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        clienteId: String(initialData.clienteId),
+        productoId: String(initialData.productoId),
+        cantidad: String(initialData.cantidad),
+        fechaRegistro: initialData.fechaRegistro?.split('T')[0] || '',
+        fechaEntrega: initialData.fechaEntrega?.split('T')[0] || '',
+        bodegaId: String(initialData.bodegaId),
+        precioEnvio: String(initialData.precioEnvio),
+        placaVehiculo: initialData.placaVehiculo || '',
+        numeroGuia: initialData.numeroGuia || ''
+      });
+    } else {
+      setFormData({
+        clienteId: '', productoId: '', cantidad: '', fechaRegistro: '', fechaEntrega: '',
+        bodegaId: '', precioEnvio: '', placaVehiculo: '', numeroGuia: ''
+      });
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     setFormData({
@@ -153,7 +184,7 @@ const EnvioTerrestreForm = ({ clientes, productos, bodegas, onSubmit, onCancel }
       </div>
       <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
         <button type="submit" className="btn btn-primary">
-          Crear Envío Terrestre
+          {initialData ? 'Actualizar Envío' : 'Crear Envío Terrestre'}
         </button>
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
           Cancelar

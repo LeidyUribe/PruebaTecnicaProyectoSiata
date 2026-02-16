@@ -1,21 +1,16 @@
-/**
- * Archivo principal de la aplicación
- * Configura Express y conecta todas las capas
- */
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { errorHandler } from './infrastructure/middleware/errorHandler.js';
 
-// Importar repositorios
 import { MySQLClienteRepository } from './infrastructure/repositories/MySQLClienteRepository.js';
 import { MySQLProductoRepository } from './infrastructure/repositories/MySQLProductoRepository.js';
 import { MySQLBodegaRepository } from './infrastructure/repositories/MySQLBodegaRepository.js';
 import { MySQLPuertoRepository } from './infrastructure/repositories/MySQLPuertoRepository.js';
 import { MySQLEnvioTerrestreRepository } from './infrastructure/repositories/MySQLEnvioTerrestreRepository.js';
 import { MySQLEnvioMaritimoRepository } from './infrastructure/repositories/MySQLEnvioMaritimoRepository.js';
+import { MySQLUsuarioRepository } from './infrastructure/repositories/MySQLUsuarioRepository.js';
 
-// Importar casos de uso
 import { CreateClienteUseCase } from './application/use-cases/cliente/CreateClienteUseCase.js';
 import { GetClienteUseCase } from './application/use-cases/cliente/GetClienteUseCase.js';
 import { GetAllClientesUseCase } from './application/use-cases/cliente/GetAllClientesUseCase.js';
@@ -27,10 +22,19 @@ import { CreatePuertoUseCase } from './application/use-cases/puerto/CreatePuerto
 import { GetAllPuertosUseCase } from './application/use-cases/puerto/GetAllPuertosUseCase.js';
 import { CreateEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/CreateEnvioTerrestreUseCase.js';
 import { GetAllEnviosTerrestresUseCase } from './application/use-cases/envio-terrestre/GetAllEnviosTerrestresUseCase.js';
+import { GetEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/GetEnvioTerrestreUseCase.js';
+import { UpdateEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/UpdateEnvioTerrestreUseCase.js';
+import { DeleteEnvioTerrestreUseCase } from './application/use-cases/envio-terrestre/DeleteEnvioTerrestreUseCase.js';
+import { SearchEnviosTerrestresUseCase } from './application/use-cases/envio-terrestre/SearchEnviosTerrestresUseCase.js';
 import { CreateEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/CreateEnvioMaritimoUseCase.js';
 import { GetAllEnviosMaritimosUseCase } from './application/use-cases/envio-maritimo/GetAllEnviosMaritimosUseCase.js';
+import { GetEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/GetEnvioMaritimoUseCase.js';
+import { UpdateEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/UpdateEnvioMaritimoUseCase.js';
+import { DeleteEnvioMaritimoUseCase } from './application/use-cases/envio-maritimo/DeleteEnvioMaritimoUseCase.js';
+import { SearchEnviosMaritimosUseCase } from './application/use-cases/envio-maritimo/SearchEnviosMaritimosUseCase.js';
+import { RegisterUsuarioUseCase } from './application/use-cases/usuario/RegisterUsuarioUseCase.js';
+import { LoginUsuarioUseCase } from './application/use-cases/usuario/LoginUsuarioUseCase.js';
 
-// Importar rutas
 import { createClienteRoutes } from './presentation/routes/clienteRoutes.js';
 import { createProductoRoutes } from './presentation/routes/productoRoutes.js';
 import { createBodegaRoutes } from './presentation/routes/bodegaRoutes.js';
@@ -38,11 +42,10 @@ import { createPuertoRoutes } from './presentation/routes/puertoRoutes.js';
 import { createEnvioTerrestreRoutes } from './presentation/routes/envioTerrestreRoutes.js';
 import { createEnvioMaritimoRoutes } from './presentation/routes/envioMaritimoRoutes.js';
 import { createAuthRoutes } from './presentation/routes/authRoutes.js';
+import { createUsuarioRoutes } from './presentation/routes/usuarioRoutes.js';
 
-// Cargar variables de entorno
 dotenv.config();
 
-// Validar variables de entorno críticas al inicio
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
   console.error('❌ ERROR: JWT_SECRET no está configurado en el archivo .env');
   console.error('Por favor, crea un archivo .env en la carpeta backend/ con la siguiente configuración:');
@@ -66,6 +69,7 @@ const bodegaRepository = new MySQLBodegaRepository();
 const puertoRepository = new MySQLPuertoRepository();
 const envioTerrestreRepository = new MySQLEnvioTerrestreRepository();
 const envioMaritimoRepository = new MySQLEnvioMaritimoRepository();
+const usuarioRepository = new MySQLUsuarioRepository();
 
 // Inicializar casos de uso (Inyección de Dependencias)
 const createClienteUseCase = new CreateClienteUseCase(clienteRepository);
@@ -84,6 +88,15 @@ const createEnvioTerrestreUseCase = new CreateEnvioTerrestreUseCase(
   bodegaRepository
 );
 const getAllEnviosTerrestresUseCase = new GetAllEnviosTerrestresUseCase(envioTerrestreRepository);
+const getEnvioTerrestreUseCase = new GetEnvioTerrestreUseCase(envioTerrestreRepository);
+const updateEnvioTerrestreUseCase = new UpdateEnvioTerrestreUseCase(
+  envioTerrestreRepository,
+  clienteRepository,
+  productoRepository,
+  bodegaRepository
+);
+const deleteEnvioTerrestreUseCase = new DeleteEnvioTerrestreUseCase(envioTerrestreRepository);
+const searchEnviosTerrestresUseCase = new SearchEnviosTerrestresUseCase(envioTerrestreRepository);
 const createEnvioMaritimoUseCase = new CreateEnvioMaritimoUseCase(
   envioMaritimoRepository,
   clienteRepository,
@@ -91,6 +104,17 @@ const createEnvioMaritimoUseCase = new CreateEnvioMaritimoUseCase(
   puertoRepository
 );
 const getAllEnviosMaritimosUseCase = new GetAllEnviosMaritimosUseCase(envioMaritimoRepository);
+const getEnvioMaritimoUseCase = new GetEnvioMaritimoUseCase(envioMaritimoRepository);
+const updateEnvioMaritimoUseCase = new UpdateEnvioMaritimoUseCase(
+  envioMaritimoRepository,
+  clienteRepository,
+  productoRepository,
+  puertoRepository
+);
+const deleteEnvioMaritimoUseCase = new DeleteEnvioMaritimoUseCase(envioMaritimoRepository);
+const searchEnviosMaritimosUseCase = new SearchEnviosMaritimosUseCase(envioMaritimoRepository);
+const registerUsuarioUseCase = new RegisterUsuarioUseCase(usuarioRepository);
+const loginUsuarioUseCase = new LoginUsuarioUseCase(usuarioRepository);
 
 // Dependencias para las rutas
 const dependencies = {
@@ -105,12 +129,23 @@ const dependencies = {
   getAllPuertosUseCase,
   createEnvioTerrestreUseCase,
   getAllEnviosTerrestresUseCase,
+  getEnvioTerrestreUseCase,
+  updateEnvioTerrestreUseCase,
+  deleteEnvioTerrestreUseCase,
+  searchEnviosTerrestresUseCase,
   createEnvioMaritimoUseCase,
-  getAllEnviosMaritimosUseCase
+  getAllEnviosMaritimosUseCase,
+  getEnvioMaritimoUseCase,
+  updateEnvioMaritimoUseCase,
+  deleteEnvioMaritimoUseCase,
+  searchEnviosMaritimosUseCase,
+  registerUsuarioUseCase,
+  loginUsuarioUseCase
 };
 
 // Rutas
-app.use('/api/auth', createAuthRoutes());
+app.use('/api/auth', createAuthRoutes()); // Mantener para compatibilidad
+app.use('/api/usuarios', createUsuarioRoutes(dependencies)); // Nuevo sistema de autenticación
 app.use('/api/clientes', createClienteRoutes(dependencies));
 app.use('/api/productos', createProductoRoutes(dependencies));
 app.use('/api/bodegas', createBodegaRoutes(dependencies));
@@ -134,7 +169,8 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📚 Documentación de API disponible en /health`);
-  console.log(`🔐 Endpoint de autenticación: POST /api/auth/login`);
+  console.log(`🔐 Endpoint de registro: POST /api/usuarios/register`);
+  console.log(`🔐 Endpoint de login: POST /api/usuarios/login`);
 });
 
 export default app;

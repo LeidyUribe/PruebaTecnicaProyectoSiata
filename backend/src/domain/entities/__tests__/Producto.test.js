@@ -40,13 +40,6 @@ describe('Producto', () => {
   });
 
   describe('constructor', () => {
-    test('debe asignar fechaCreacion por defecto si no se proporciona', () => {
-      const nuevoProducto = new Producto({
-        tipo: 'Test'
-      });
-      expect(nuevoProducto.fechaCreacion).toBeInstanceOf(Date);
-    });
-
     test('debe permitir descripcion opcional', () => {
       const nuevoProducto = new Producto({
         tipo: 'Test'
@@ -55,17 +48,14 @@ describe('Producto', () => {
     });
 
     test('debe asignar todos los campos correctamente', () => {
-      const fecha = new Date('2024-01-01');
       const nuevoProducto = new Producto({
         id: 1,
         tipo: 'Electrónico',
-        descripcion: 'Descripción',
-        fechaCreacion: fecha
+        descripcion: 'Descripción'
       });
       expect(nuevoProducto.id).toBe(1);
       expect(nuevoProducto.tipo).toBe('Electrónico');
       expect(nuevoProducto.descripcion).toBe('Descripción');
-      expect(nuevoProducto.fechaCreacion).toBe(fecha);
     });
   });
 });

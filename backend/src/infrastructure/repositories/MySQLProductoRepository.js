@@ -1,6 +1,3 @@
-/**
- * Implementación del Repositorio de Producto con MySQL
- */
 import mysqlConnection from '../database/MySQLConnection.js';
 import { Producto } from '../../domain/entities/Producto.js';
 
@@ -11,12 +8,11 @@ export class MySQLProductoRepository {
 
   async create(producto) {
     const [result] = await this.pool.execute(
-      `INSERT INTO productos (tipo, descripcion, fecha_creacion)
-       VALUES (?, ?, ?)`,
+      `INSERT INTO productos (tipo, descripcion)
+       VALUES (?, ?)`,
       [
         producto.tipo,
-        producto.descripcion || null,
-        producto.fechaCreacion
+        producto.descripcion || null
       ]
     );
 
@@ -35,7 +31,7 @@ export class MySQLProductoRepository {
   }
 
   async findAll() {
-    const [rows] = await this.pool.execute('SELECT * FROM productos ORDER BY fecha_creacion DESC');
+    const [rows] = await this.pool.execute('SELECT * FROM productos ORDER BY id DESC');
     return rows.map(row => this.mapToEntity(row));
   }
 
@@ -63,8 +59,7 @@ export class MySQLProductoRepository {
     return new Producto({
       id: row.id,
       tipo: row.tipo,
-      descripcion: row.descripcion,
-      fechaCreacion: row.fecha_creacion
+      descripcion: row.descripcion
     });
   }
 }

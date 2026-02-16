@@ -1,6 +1,3 @@
-/**
- * Interfaz del Repositorio de Puerto
- */
 export class IPuertoRepository {
   async create(puerto) {
     throw new Error('Method create() must be implemented');

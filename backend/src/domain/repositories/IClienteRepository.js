@@ -1,7 +1,3 @@
-/**
- * Interfaz del Repositorio de Cliente
- * Define el contrato que debe cumplir cualquier implementación
- */
 export class IClienteRepository {
   async create(cliente) {
     throw new Error('Method create() must be implemented');

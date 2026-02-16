@@ -20,8 +20,9 @@ exit;
 ```bash
 # Opción 1: Desde MySQL CLI
 mysql -u root -p logistica_db < backend/src/infrastructure/database/migrations/001_create_tables.sql
+mysql -u root -p logistica_db < backend/src/infrastructure/database/migrations/002_create_usuarios_table.sql
 
-# Opción 2: Copiar y pegar el contenido del archivo SQL en tu cliente MySQL
+# Opción 2: Copiar y pegar el contenido de los archivos SQL en tu cliente MySQL
 ```
 
 ### 3. Configurar Backend
@@ -68,12 +69,14 @@ npm run dev
 ## 🔑 Primeros Pasos
 
 1. Abrir http://localhost:5173
-2. Hacer clic en "Iniciar Sesión" para obtener un token
+2. **Registrarse** con email y contraseña (o usar "Iniciar Sesión" si ya tienes cuenta)
 3. Navegar por las secciones del menú
 4. Crear un Cliente
 5. Crear un Producto
 6. Crear una Bodega o Puerto
 7. Crear un Envío Terrestre o Marítimo
+
+**Nota:** La contraseña debe tener al menos 6 caracteres.
 
 ## 🧪 Ejecutar Pruebas
 

@@ -70,3 +70,5 @@ export const createEnvioTerrestreValidator = [
     .matches(/^[A-Z0-9]{10}$/i)
     .withMessage('El número de guía debe contener solo letras y números')
 ];
+
+export const updateEnvioTerrestreValidator = createEnvioTerrestreValidator;

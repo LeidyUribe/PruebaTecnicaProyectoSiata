@@ -1,14 +1,9 @@
-/**
- * Entidad de Dominio: Puerto
- * Representa un puerto para envíos marítimos
- */
 export class Puerto {
-  constructor({ id, nombre, ubicacion, pais, fechaCreacion }) {
+  constructor({ id, nombre, ubicacion, pais }) {
     this.id = id;
     this.nombre = nombre;
     this.ubicacion = ubicacion;
     this.pais = pais;
-    this.fechaCreacion = fechaCreacion || new Date();
   }
 
   isValid() {

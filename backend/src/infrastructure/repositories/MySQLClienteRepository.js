@@ -1,6 +1,3 @@
-/**
- * Implementación del Repositorio de Cliente con MySQL
- */
 import mysqlConnection from '../database/MySQLConnection.js';
 import { Cliente } from '../../domain/entities/Cliente.js';
 
@@ -11,14 +8,13 @@ export class MySQLClienteRepository {
 
   async create(cliente) {
     const [result] = await this.pool.execute(
-      `INSERT INTO clientes (nombre, email, telefono, direccion, fecha_creacion)
-       VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO clientes (nombre, email, telefono, direccion)
+       VALUES (?, ?, ?, ?)`,
       [
         cliente.nombre,
         cliente.email,
         cliente.telefono || null,
-        cliente.direccion || null,
-        cliente.fechaCreacion
+        cliente.direccion || null
       ]
     );
 
@@ -37,7 +33,7 @@ export class MySQLClienteRepository {
   }
 
   async findAll() {
-    const [rows] = await this.pool.execute('SELECT * FROM clientes ORDER BY fecha_creacion DESC');
+    const [rows] = await this.pool.execute('SELECT * FROM clientes ORDER BY id DESC');
     return rows.map(row => this.mapToEntity(row));
   }
 
@@ -74,17 +70,13 @@ export class MySQLClienteRepository {
     return this.mapToEntity(rows[0]);
   }
 
-  /**
-   * Mapea un registro de la base de datos a una entidad de dominio
-   */
   mapToEntity(row) {
     return new Cliente({
       id: row.id,
       nombre: row.nombre,
       email: row.email,
       telefono: row.telefono,
-      direccion: row.direccion,
-      fechaCreacion: row.fecha_creacion
+      direccion: row.direccion
     });
   }
 }

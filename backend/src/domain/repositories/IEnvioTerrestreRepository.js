@@ -1,6 +1,3 @@
-/**
- * Interfaz del Repositorio de Envío Terrestre
- */
 export class IEnvioTerrestreRepository {
   async create(envio) {
     throw new Error('Method create() must be implemented');

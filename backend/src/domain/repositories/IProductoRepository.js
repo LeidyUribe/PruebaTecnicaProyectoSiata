@@ -1,6 +1,3 @@
-/**
- * Interfaz del Repositorio de Producto
- */
 export class IProductoRepository {
   async create(producto) {
     throw new Error('Method create() must be implemented');
